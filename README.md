@@ -1,2 +1,2 @@
 # AnsOME
-Ansatz Optimization for Molecular Energy (Estimation
+Ansatz Optimization for Molecular Energy (Estimation)
