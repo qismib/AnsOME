@@ -1,0 +1,310 @@
+\documentclass[11pt, a4paper, oneside, openright]{report}
+%\documentclass[11pt, a4paper, twoside, openright]{report}
+
+% Margini (4cm a sx, 2.5cm a dx, 2.5cm in alto, 2.5cm in basso)
+\usepackage[top=2.5cm, bottom=2.5cm, left=4cm, right=2.5cm, centering, head=21.75 pt]{geometry}
+
+% Interlinea
+\linespread{1.2}
+
+%-------------------------------------------------------------------------------------
+% Pacchetti
+\usepackage{braket}
+\usepackage{fancyhdr} %per abbellire lo stile della pagina. metto dentro anche le linee in alto alla pagina
+\usepackage{mathrsfs}
+\usepackage{amsmath} % AMS Math Package
+\usepackage{amsthm} % Theorem Formatting
+\usepackage{booktabs}
+\usepackage{caption}
+\usepackage{amssymb}
+\usepackage{physics}
+\usepackage{verbatim} %begin comment
+\usepackage{caption} %caption
+\usepackage{comment}
+\usepackage{derivative} % il comando pdv apre due graffe per numeratore e denominatore
+\usepackage{epigraph} %serve per le citazioni
+\usepackage{quoting}
+\usepackage{dirtytalk}
+\quotingsetup{font=small} %tutti e tre utilizzati per inserire la quote a inizio tesi
+\usepackage[T1]{fontenc}
+\usepackage[italian]{babel} % applicazione regole di scrittura per la lingua italiana 
+\usepackage[utf8]{inputenc} % codifica UTF-8
+%\usepackage{scrlayer-scrpage} % stili pagina per il frontespizio
+\usepackage{graphicx} % inserimento di immagini
+\usepackage{csquotes} % per le citazioni "in blocco"
+\usepackage[backend=biber, style=numeric, sorting=nyt]{biblatex} % bibliografia con pacchetto biblatex (https://ctan.org/pkg/biblatex?lang=en)
+\addbibresource{reference.bib}
+\usepackage{titlesec} % per la formattazione dei titoli delle sezioni, capitoli etc.
+\usepackage{float} % per il posizionamento delle immagini
+\usepackage[colorlinks=true, allcolors=black]{hyperref} %per link hypertext
+\usepackage[tableposition = top, figureposition = bottom, font = small]{caption}
+
+%-------------------------------------------------------------------------------------
+
+%dettagli di lavoro per il pacchetto fancyhdr
+\pagestyle{fancy}
+\rhead{}
+\fancyfoot[C]{\thepage}
+%%% Fine impostazioni fancyhdr.
+
+%\appto{\bibsetup}{\raggedright}
+
+\setlength{\parindent}{0pt} % per rimuovere le indentazioni automatiche
+
+%=====================================================================================
+
+%Comandi nuovi
+\newcommand{\inglese}[1]{\foreignlanguage{english}{\em #1}}
+\DeclareMathOperator{\sgn}{sgn}
+
+% preferisco la linea sotto alla freccia alta per i vettori
+\renewcommand{\vec}[1]{\underline{\hspace{-0.1em}#1\hspace{-0.05em}}}
+
+% per i differenziali
+\renewcommand{\d}{\text{d}\,}
+
+% il forall normale è orribile
+\usepackage{stackengine}
+\usepackage{upgreek}
+\renewcommand{\forall}{\stackMath\rotatebox[origin=c]{180}{\stackinset{c}{0.2pt}{c}{-0.65pt}{\scalebox{1.5}[1.0]{-}}{\Uplambda}}\!}
+% stessa cosa vale per nexists
+\renewcommand{\nexists}{\stackMath\rotatebox[origin=c]{180}{\stackinset{c}{0.2pt}{c}{-0.65pt}{\scalebox{1.5}[1.0]{\textbackslash}}{E}}\!}
+
+% vettori colonna
+\newcommand{\vectorTwo}[2]{\begin{pmatrix} #1 \\ #2 \end{pmatrix}}
+
+%-------------------------------------------------------------------------------------
+
+% Colori
+\usepackage{xcolor}
+\definecolor{mygreen}{rgb}{0,0.6,0}
+\definecolor{mygray}{rgb}{0.5,0.5,0.5}
+\definecolor{mymauve}{rgb}{0.58,0,0.82}
+\definecolor{darkgray}{rgb}{.4,.4,.4}
+\definecolor{navy}{HTML}{000080}
+\definecolor{purple}{rgb}{0.65, 0.12, 0.82}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+\hypersetup{
+    colorlinks=true,
+    linkcolor=navy,  
+    citecolor=mygreen,     
+    urlcolor=blue    
+}
+
+%-------------------------------------------------------------------------------------
+% Formattazione speciale
+
+\usepackage{quantikz} % circuiti quantistici
+
+\usepackage{adjustbox}
+\usepackage[breakable]{tcolorbox} % effetto callout
+%\tcbset{colframe=blue!50!black, colback=blue!5!white, fonttitle=\bfseries}
+\tcbset{colframe=navy, colback=navy!4!white, fonttitle=\bfseries}
+
+\usepackage{listings} % ambiente codice
+\lstset{
+  language=Python,               % Linguaggio del codice (es. Python, C++)
+  frame=single,                  % Bordo intorno al codice
+  basicstyle=\ttfamily\small,    % Font e dimensione del testo
+  keywordstyle=\color{blue},     % Colore delle keyword
+  commentstyle=\color{gray},     % Colore dei commenti
+  numbers=left,                  % Numerazione delle righe
+  numberstyle=\tiny\color{gray}  % Stile dei numeri
+}
+
+% code highlighting
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+
+
+\lstdefinestyle{mystyle}{
+    %backgroundcolor=\color{backcolour},   
+    language=Python,
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{magenta},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\ttfamily\footnotesize,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=b,                    
+    keepspaces=true,                 
+    numbers=left,                    
+    numbersep=5pt,                  
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=2,
+    %moredelim=**[is][\color{cyan}]{.}{()} % per i metodi (non funziona)
+}
+
+\lstset{style=mystyle,
+morekeywords=[2]{PySCFDriver,
+  ElectronicStructureProblem,
+  FreezeCoreTransformer,
+  UCCX, UCCS,  UCCD, UCCSD, PUCCD,
+  JordanWignerMapper,
+  HartreeFock,
+  VQE,
+  Estimator,
+  GroundStateEigensolver,
+  EfficientSU2,
+  Sequence,
+  QubitMapper,
+  FermionicOp,
+  EvolvedOperatorAnsatz,
+  ElectronicIntegrals,
+}, % classi
+morekeywords=[3]{run,
+  map,
+  transform,
+  solve,
+  second_q_ops,
+  compute_minimum_eigenvalue,
+  draw,
+  adjoint,
+  join,
+  append,
+  ndarray,
+  zeros,
+  einsum,
+  from_raw_integrals,
+  get,
+}, % metodi
+keywordstyle=[2]\color{navy}, % stile classi
+keywordstyle=[3]\color{blue}, % stile metodi
+}
+
+% per il codice inline
+%\NewDocumentCommand{\myinline}{v}{\colorbox{navy!4!white}{\lstinline|#1|}}
+\NewDocumentCommand{\myinline}{v}{%
+  \colorbox{navy!4!white}{\lstinline|#1|}%
+}
+
+\usepackage{subfig}
+\usepackage{subcaption}
+
+%-------------------------------------------------------------------------------------
+
+% Formato delle intestazioni
+%\titleformat{\chapter}[block]
+%  {\normalfont\LARGE\bfseries}{\thechapter.}{0.5em}{\LARGE}
+%\titlespacing{\chapter}{0pt}{-20pt}{25pt}
+
+% Formato delle intestazioni dei capitoli
+\titlespacing{\chapter}{0pt}{-20pt}{30pt} % Margini e spaziatura
+\titleformat{\chapter}[display]
+  {\normalfont\LARGE\bfseries} % Formattazione del testo
+  {Capitolo \thechapter} % "Capitolo #" allineato a sinistra
+  {20pt} % Spaziatura tra "Capitolo #" e il titolo
+  {\Huge} % Nessun comando aggiuntivo per il titolo
+
+%-------------------------------------------------------------------------------------
+% Organizzazione:
+
+% FRONTMATTER
+% Frontespizio
+% Dedica ?
+% Sommario 
+% Indici 
+% Simboli e notazioni ?
+% Prefazione 
+
+% MAINMATTER
+% Capitoli interni
+% Appendici ?
+
+% BACKMATTER
+% Bibliografia 
+% Ringraziamenti ?
+%-------------------------------------------------------------------------------------
+
+\begin{document}
+
+%------------------------------------------------------------------ Inizio FRONTMATTER
+
+% Frontespizio
+\input{Organizzazione/00-Frontespizio/Frontespizio.tex}
+\newpage
+
+%------------------------------------------------------------------
+
+% dedica?
+\cleardoublepage
+\thispagestyle{empty}
+\vspace*{\stretch{1}}
+\begin{flushright}
+\itshape \inglese{\textit{
+  And as we wind on\\down the road\\our shadows taller\\than our soul
+}} \\
+%- Autore?
+\end{flushright}
+\vspace{\stretch{2}}
+
+\cleardoublepage
+
+\thispagestyle{empty}
+\clearpage
+\newpage
+
+%------------------------------------------------------------------
+
+% Abstract
+\input{Organizzazione/0-Introduzione/0.1-Abstract.tex}
+
+%------------------------------------------------------------------
+
+% Indici
+\tableofcontents
+\thispagestyle{empty}
+\listoffigures
+
+%================================================================== Fine FRONTMATTER
+
+%------------------------------------------------------------------ Inizio MAINMATTER
+
+\addcontentsline{toc}{chapter}{Introduzione} % Capitolo non numerato
+\input{Organizzazione/0-Introduzione/0.2-Intro.tex}
+
+% Capitolo 1
+\input{Organizzazione/1-CenniTeorici/1.1-HF_e_basi.tex}
+\input{Organizzazione/1-CenniTeorici/1.2-post_HF.tex}
+
+% Capitolo 2
+\input{Organizzazione/2-QuantumComputing/2.1-Qubit.tex}
+\input{Organizzazione/2-QuantumComputing/2.2-VQA.tex}
+\input{Organizzazione/2-QuantumComputing/2.3-QCC.tex}
+
+% Capitolo 3
+\input{Organizzazione/3-Simulazioni/3.1-Intro_Codice.tex}
+
+\input{Organizzazione/3-Simulazioni/3.2-Confronti_UCC.tex}
+\input{Organizzazione/3-Simulazioni/3.3-OO_pUCCD.tex}
+
+% Conclusioni
+\addcontentsline{toc}{chapter}{Conclusioni} % Capitolo numerato?
+\input{Organizzazione/4-Conclusioni/4.1-Conclusioni.tex}
+
+\clearpage
+
+%================================================================== Fine MAINMATTER
+
+%------------------------------------------------------------------ Inizio BACKMATTER
+
+% Appendici?
+%\input{Organizzazione Files/Appendici/Appendice}
+
+% Bibliografia
+\printbibliography
+
+%------------------------------------------------------------------
+
+% Ringraziamenti?
+%\addcontentsline{toc}{chapter}{Ringraziamenti} % Capitolo non numerato
+%\input{Organizzazione Files/Ringraziamenti}
+
+%==================================================================
+\end{document}

@@ -1,0 +1,289 @@
+\chapter{Cenni teorici}
+
+Questo capitolo offre una panoramica dei concetti e delle tecniche principali della \textbf{chimica computazionale}, un ramo della chimica che utilizza modelli matematici e algoritmi numerici per risolvere problemi legati alla struttura, alle proprietà e al comportamento delle molecole e dei materiali. Con l’avanzamento delle strategie computazionali e l’aumento della potenza di calcolo, la chimica computazionale è diventata uno strumento fondamentale per comprendere e prevedere fenomeni chimici.
+
+In particolare, si affronteranno il metodo di Hartree-Fock e i metodi di correlazione elettronica \inglese{Full Configuration Interaction} e \inglese{Coupled-Cluster}, che permettono di descrivere le interazioni tra gli elettroni nelle molecole.
+
+% ==============================================================================================================
+\section{Problema elettronico}\label{sez:problema-elettronico}
+
+Il problema affrontato nel presente elaborato è trovare soluzioni approssimate all'equazione di Schrödinger stazionaria non-relativistica
+
+\begin{equation}\label{eqn:Schrödinger-stazionaria}
+    \hat{H}\ket{\psi(\{\vec{R}_A\},\{\vec{r}_i\})} = E\ket{\psi(\{\vec{R}_A\},\{\vec{r}_i\})}
+\end{equation}
+
+dove $\hat{H}$ è l'hamiltoniana di un sistema di $N$ nuclei e $M$ elettroni, individuati rispettivamente dalle posizioni $\{\vec{R}_A\}_{A=1,\ldots,N}$ e $\{\vec{r}_i\}_{i=1,\ldots,M}$. Esplicitando le interazioni tra i componenti del sistema:
+
+\begin{equation}\label{eqn:hamiltoniana-molecolare}
+    \hat{H} = \hat{T}_e + \hat{T}_n + U_{nn} + U_{ee} + U_{ne}
+\end{equation}
+
+In cui compaiono i seguenti termini:
+
+\begin{subequations}
+\begin{itemize}
+    \item [$\hat{T}_{e}$:] Operatore energia cinetica degli elettroni
+        \begin{equation}\label{eqn:cinetica-elettroni}
+            \hat{T}_{n} = \sum_{i}^{M} \frac{\,\hat{\vec{p}}_{i}^{2}}{m_e}
+        \end{equation}
+
+    \item [$\hat{T}_{n}$:] Operatore energia cinetica dei nuclei
+        \begin{equation}\label{eqn:cinetica-nuclei}
+            \hat{T}_{e} = \sum_{A}^{N} \frac{\,\hat{\vec{p}}_{A}^{2}}{M_A}
+        \end{equation}
+    
+    \item [$U_{nn}$:] Energia potenziale coulombiana tra i nuclei
+        \begin{equation}\label{eqn:potenziale-nuclei}
+            U_{nn}(\{\vec{R}_A\})  = \frac12\sum_{A}^{N}\sum_{B\neq A}^{N} 
+            \frac{1}{4\pi\varepsilon_0} \frac{Z_A Z_B e^2}{|\,\vec{R}_A - \vec{R}_B |}
+        \end{equation}
+
+    \item [$U_{ee}$:] Energia potenziale coulombiana tra gli elettroni
+        \begin{equation}\label{eqn:potenziale-elettroni}
+            U_{ee}(\{\vec{r}_i\}) = \frac12\sum_{i}^{M}\sum_{j\neq i}^{M} 
+            \frac{1}{4\pi\varepsilon_0} \frac{e^2}{|\,\vec{r}_i - \vec{r}_j |}
+        \end{equation}
+    
+    \item [$U_{en}$:] Energia potenziale coulombiana tra i gli elettroni e i nuclei
+        \begin{equation}\label{eqn:potenziale-elettroni-nuclei}
+            U_{en}(\{\vec{r}_i,\vec{R}_A\}) = -\sum_{A}^{N}\sum_{i}^{M} 
+            \frac{1}{4\pi\varepsilon_0} \frac{Z_A e^2}{|\,\vec{R}_A - \vec{r}_i |}
+        \end{equation}
+\end{itemize}
+\end{subequations}
+
+Dove $\hat{\vec{p}}=-i\hbar\vec{\nabla}$ è l'operatore momento lineare, $m_e$ la massa dell'elettrone mentre $M_A$ quella del nucleo $A$ con numero atomico $Z_A$.
+
+La presenza del termine $U_{en}$ porta subito ad una considerazione: qualsiasi soluzione \textbf{esatta} $\Psi(\{\vec{r}_i\},\{\vec{R}_A\})$ dell'equazione di Schrödinger non può essere fattorizzata in una parte elettronica e una nucleare \cite{Echenique_2007}.
+
+\begin{equation*}
+    \nexists\ \psi_n,\, \psi_{el}\, \text{ t.c. }
+    \Psi(\{\vec{x}_i\},\{\vec{R}_A\}) = \psi_n(\{\vec{R}_A\})\ \psi_{el}(\{\vec{r}_i\})
+\end{equation*}
+
+Se ciò fosse possibile, il problema degli elettroni e quello dei nuclei potrebbero essere trattati separatamente. Da questa prima osservazione deriva l'utilità di introdurre un'approssimazione che riesca a slegare le due questioni.  
+  
+% --------------------------------------------------------------------------------------------------------------
+\subsection{Approssimazione di Born-Oppenheimer}\label{subsec:Born-Oppenheimer}
+
+Per affrontare il tema presentato alla Sezione~\ref{sez:problema-elettronico}, si parte con l'isolare i termini elettronici dal problema globale, costruendo un'hamiltoniana che dipende soltanto parametricamente dalle posizioni dei nuclei. 
+
+\begin{equation}\label{eqn:hamiltoniana-elettronica}
+    \hat{H}_{el} \ket{\psi_{el}} = 
+    \left( \hat{T}_e + U_{ee} + U_{nn} + U_{ne} \right) \ket{\psi_{el}} =
+    E(\{\vec{R}_A\}) \ket{\psi_{el}}
+\end{equation}
+
+Gli autostati $\ket{\psi_{el}}$ formano un sistema ortonormale completo, perciò le soluzioni del problema complessivo possono essere espresse come loro combinazioni lineari, pesate da delle funzioni parametriche $\chi(\{\vec{R}_A\})$ \cite{Sherril_2005}, che si occupano di modulare le diverse configurazioni elettroniche in relazione alla disposizione spaziale degli atomi nel sistema.
+
+\begin{equation} \label{eqn:combinazione-stati-elettronici}
+    \psi = \sum_{k} \chi_k(\{\vec{R}_A\})\ {\psi_{el}}_k(\{\vec{r}_i\},\{\vec{R}_A\})
+\end{equation}
+
+Questo rientra nell’approssimazione di Born-Oppenheimer \cite{Born_Opp}, che separa il problema elettronico da quello nucleare sfruttando la notevole differenza di massa tra nuclei ed elettroni. Essendo questi ultimi molto meno massivi, la loro dinamica avviene su scale temporali estremamente più brevi; ciò permette di assumere che, al variare della configurazione nucleare, gli elettroni adeguino istantaneamente il loro stato, seguendo il moto dei nuclei in modo adiabatico. 
+Secondo questa interpretazione, vengono applicati i seguenti passaggi:
+
+\begin{enumerate}
+    \item La somma \ref{eqn:combinazione-stati-elettronici} si riduce ad un solo stato elettronico:
+        \begin{equation}\label{eqn:approssimazione-adiabatica}
+            \psi \approx \chi(\{\vec{R}_A\}) \psi_{el}(\{\vec{r}_i\},\{\vec{R}_A\})
+        \end{equation}
+        Si può quindi riscrivere l'equazione~(\ref{eqn:Schrödinger-stazionaria})
+        \begin{equation}
+            \left(\hat{T}_n+\hat{H}_e\right)\ket{\chi\psi_{el}} =
+            \left(\hat{T}_n+E_{el}(\{\vec{R}_A\})\right)\ket{\chi\psi_{el}} = E\ket{\chi\psi_{el}}
+        \end{equation}
+
+    \item Il termine ottenuto applicando l'operatore $\hat{T}_n$ a $\psi_{el}$ diventa trascurabile, rendendo $\psi_{el}$ un semplice fattore moltiplicativo che può essere eliso:
+        \begin{equation}
+            (\hat{T}_n+E_{el})\chi = E\chi
+        \end{equation}
+\end{enumerate}
+
+Adottando questo approccio, si ottiene un problema nucleare che dipende dal potenziale efficace $E_{el}(\{R_A\})$, assegnato dalla soluzione del problema elettronico parametrico nelle posizioni dei nuclei e indipendente dal loro moto. 
+In sintesi: l'approssimazione di Born-Oppenheimer permette di studiare un sistema molecolare affrontando separatamente le dinamiche degli elettroni e dei nuclei. Questo lavoro di tesi si concentra prevalentemente sulle tecniche computazionali adottate per la costruzione di $E_{el}(\{R_A\})$.
+
+% --------------------------------------------------------------------------------------------------------------
+\subsection{Metodo di Hartree}\label{subsec:Hartree}
+
+Assumendo valida l’approssimazione di Born-Oppenheimer, il tema principale diventa trovare lo stato fondamentale dell’hamiltoniana elettronica (eq. \ref{eqn:hamiltoniana-elettronica}) per una configurazione nucleare fissata $\{R_A\}$.
+
+Nella risoluzione del problema elettronico - fatta eccezione per pochi casi semplici - ci si trova spesso a considerare problemi a molti elettroni, in cui la presenza del termine d'interazione $U_{ee}$ rende necessario introdurre un nuovo livello di approssimazione.
+
+Un primo approccio è costituito dal metodo di Hartree, in cui è centrale il concetto di \textbf{approssimazione di campo medio}. In questo schema, ciascun elettrone viene trattato come se si muovesse all'interno del campo medio generato dagli altri elettroni in \inglese{background}, evitando di considerarne individualmente l'influenza. 
+Se si immagina la densità di probabilità $|\psi_i({\vec{r}})|^2$ alla stregua di una distribuzione continua di carica, si può definire il \textbf{potenziale di Hartree} $U_H$:
+
+\begin{equation}\label{eqn:distribuzione-di-carica}
+    \rho_{k}^{(0)}(\vec{r}) = \sum_{i \neq k} \rho_{i}^{(0)}(\vec{r}) = 
+    \sum_{i \neq k} e |\psi_{i}^{(0)}(\vec{r})|^2
+\end{equation}
+che dà:
+\begin{equation}\label{eqn:potenziale-di-Hartree}
+    {U_{H}}^{k}(\vec{r}) = -\frac{e}{4\pi\varepsilon_0}
+    \frac12\int \frac{\rho_{k}^{(0)}(\vec{r'})}{|\,\vec{r}-\vec{r}'|} \d{\vec{r'}}
+\end{equation}
+
+A questo punto occorre fare una precisazione: le funzioni d'onda $\psi_i({\vec{r}})$, necessarie per determinare il potenziale di Hartree, sono le soluzioni del problema stesso e non è possibile conoscerle a priori. Per questo motivo, il metodo di Hartree rientra nelle cosiddette teorie auto-consistenti di campo medio o \inglese{self-consistent field} (SCF) \inglese{theories}. 
+In breve, lo schema prevede di inserire inizialmente un \inglese{guess} o \textbf{ansatz} $\psi_{i}^{(0)}(\vec{r})$\footnote{Tipicamente, se si applica il metodo a sistemi atomici, le funzioni d'onda idrogenoidi} per calcolare in prima istanza $U_{H}^{(0)}$; dopodiché il metodo si sviluppa in maniera iterativa: ad ogni applicazione $m$-esima, si calcolano nuove soluzioni $\psi_{i}^{(m+1)}(\vec{r})$ e si determina il nuovo potenziale $U_{H}^{(m+1)}$, interrompendo il processo quando si raggiunge l'accuratezza desiderata\footnote{Nelle righe seguenti si trascurano gli indici d'iterazione $(m)$, poiché si preferisce presentare il metodo di Hartree in maniera sintetica.}. 
+
+In tale impostazione l'hamiltoniana $H_{el}$ diventa separabile \cite{modern_quantum_chem}, perciò può essere scritta come somma delle hamiltoniane di singola particella $h_k$:
+
+\begin{equation}\label{eqn:hamiltoniana-separabile}
+    H_{el} \approx \sum_{k}^{M} h_{k}
+\end{equation}
+
+dove si introduce $U_H$ al posto di $U_{ee}$
+
+\begin{equation}
+    {U_{ee}}^{k} = \sum_{j \neq k}^{M} \frac{1}{4\pi\varepsilon_0} \frac{e^2}{|\,\vec{r}_k - \vec{r}_j |}
+    \;\longrightarrow\;
+    {V_{H}}^{k}
+\end{equation}
+per cui\footnote{Fissando la posizione dei nuclei il termine $U_{nn}$ diviene una semplice costante che introduce uno slittamento uniforme delle energie, motivo per cui viene omesso nel prosieguo della trattazione.}:
+\begin{equation}\label{eqn:hamiltoniana-singola-particella}
+    h_{k} = \frac{|\,\hat{\vec{p}}_k|^2}{2m_e} + 
+    {U_{H}}^{k} + U_{en}^{k}
+\end{equation}
+
+% U_{en}^{k}
+% \sum_{A}^{N} \frac{1}{4\pi\varepsilon_0} \frac{Z_A e^2}{| \vec{R}_A - \vec{r}_k |}
+
+e si avrà che l'autovalore $E_{el}$ del problema elettronico è somma delle singole energie $\epsilon_k$ e la funzione d'onda del sistema $\psi_{el}$ è fattorizzabile nelle specifiche $\psi_k$
+
+\begin{equation}\label{eqn:prodotto-di-Hartree}
+    E_{el} = \sum_{k}^{M} \epsilon_k\ \ \land\ \ 
+    \psi_{el} = \prod_{k}^{M} \psi_k
+\end{equation}
+
+nella letteratura, una $\psi_{el}$ costruita in questo modo è detta di frequente \textbf{prodotto di Hartree}.
+
+
+% --------------------------------------------------------------------------------------------------------------
+\subsection{Metodo di Hartree-Fock (HF)}\label{subsec:Hartree-Fock}
+
+Lo schema di Hartree è alla base dei fondamenti teorici dei metodi SCF ma non è sufficiente per descrivere accuratamente i sistemi elettronici, poiché non tiene in considerazione un aspetto fondamentale della meccanica quantistica: l'\textbf{indistinguibilità} delle particelle \cite{computational_chem}.
+Il prodotto di Hartree (eq. \ref{eqn:prodotto-di-Hartree}) non soddisfa la condizione di \textbf{antisimmetrizzazione}, per la quale è richiesto che ogni funzione d'onda che descrive un sistema di fermioni identici sia antisimmetrica rispetto allo scambio di ciascuna coppia di particelle \cite{Sherrill_2000}.
+La correzione a questo problema fu proposta indipendentemente da Fock e Slater nel 1930 e consiste nell'introdurre una funzione d'onda a molti elettroni espressa tramite un \textbf{determinante di Slater} \cite{Echenique_2007}. Da questa idea, combinata l'approssimazione di campo medio ereditata dal metodo di Hartree, nasce il metodo di Hartree-Fock (HF).
+
+% ..............................................................................................................
+\subsubsection{Determinante di Slater}
+
+Nel seguito della trattazione verrà effettuata una piccola variazione nella notazione: fino ad ora si sono indicati con $\psi(\vec{r})$ gli \textbf{orbitali spaziali}; da questo momento in poi, diventa opportuno considerare gli \textbf{orbitali di spin} $\phi({\vec{x}})$:
+
+\begin{equation}\label{eqn:orbitale-di-spin}
+    \phi(\vec{x}) = \psi(\vec{r})\,\nu
+\end{equation}
+
+in cui $\vec{x}=(\vec{r},\nu)$ e $\nu\in\{\alpha,\beta\}$ indicizza l'autostato di spin. 
+
+L'introduzione degli orbitali di spin è propedeutica alla definizione del determinante di Slater, un modo compatto e conveniente per costruire una funzione d'onda $\Phi$ totalmente antisimmetrica:
+
+\begin{equation}\label{eqn:determinante-di-Slater}
+    \Phi(\vec{x}_1,...,\vec{x}_M) = \frac{1}{M!}
+    \left|
+    \begin{matrix}
+        \phi_1(\vec{x}_1) & \phi_2(\vec{x}_1) & \dots  & \phi_M(\vec{x}_1) \\
+        \phi_1(\vec{x}_2) & \phi_2(\vec{x}_2) & \dots  & \phi_M(\vec{x}_2) \\
+        \vdots            & \vdots            & \ddots & \vdots            \\
+        \phi_1(\vec{x}_M) & \phi_2(\vec{x}_M) & \dots  & \phi_M(\vec{x}_M) 
+    \end{matrix}
+    \right|
+\end{equation}
+
+questa scrittura sfrutta le proprietà del determinante di una matrice, il cui segno viene invertito quando vengono scambiate due colonne. Inoltre, affinché il risultato sia diverso da zero, righe e colonne devono essere tutte \textbf{linearmente indipendenti}; ciò assicura anche il rispetto del \textbf{principio di esclusione di Pauli}, poiché un sistema con due fermioni identici individuati dalle stesse coordinate $\vec{x}$ darebbe luogo a due righe uguali.
+
+Generalmente, si richiede anche che gli orbitali di spin siano ortonormali:
+
+\begin{equation}\label{eqn:ortonormalità}
+    \braket{\phi_i}{\phi_j} = \delta_{ij},\ \forall\ i,j\in[1,M]
+\end{equation}
+
+% ..............................................................................................................
+\subsubsection{Potenziale di Fock}
+
+Il passo cruciale nello schema di Hartree-Fock è supporre che la soluzione del problema elettronico sia un singolo determinante di Slater, su cui l'energia è data da:
+
+\begin{equation}\label{eqn:valore-di-aspettazione}
+    \bra{\Phi}H_{el}\ket{\Phi}
+\end{equation}
+
+sinteticamente, si può dire che il metodo di Hartree-Fock aderisce alle stesse logiche dello schema di Hartree (sez. \ref{subsec:Hartree}) con lo scopo di minimizzare l'energia (eq. \ref{eqn:valore-di-aspettazione}), ma vede l'aggiunta del \textbf{potenziale di Fock}:
+
+\begin{equation}\label{eqn:potenziale-di-Fock}
+    {U_{F}}^k(\vec{x})\ket{\phi_i(\vec{x})} = 
+    \left(
+        \frac{e^2}{4\pi\varepsilon_0}
+        \int \sum_{k}^{M} 
+        \frac{\phi^{\star}_{k}(\vec{x}')\phi_{i}(\vec{x}')}{|\,\vec{r}_i - \vec{r}_k |}
+        \ \d\vec{x}' 
+    \right)
+    \ket{\phi_k(\vec{x})}
+\end{equation}
+
+oltre alla scrittura aggiornata del potenziale di Hartree (eq. \ref{eqn:potenziale-di-Hartree})
+
+\begin{equation}\label{eqn:potenziale-di-Hartree-HF}
+    {U_{H}}^k(\vec{x})\ket{\phi_i(\vec{x})} = 
+    \left(
+        \frac{e^2}{4\pi\varepsilon_0}
+        \int \sum_{k}^{M} 
+        \frac{\phi^{\star}_{k}(\vec{x}')\phi_{k}(\vec{x}')}{|\,\vec{r}_i - \vec{r}_k |}
+        \ \d\vec{x}' 
+    \right)
+    \ket{\phi_i(\vec{x})}
+\end{equation}
+
+infine, spesso si riassume l'equazione agli autovalori - di singola particella - utilizzando l'\textbf{operatore di Fock} $\hat{F}$:
+
+\begin{equation}\label{eqn:operatore-di-Fock}
+    \hat{F}^k = h_k + {U_H}^k - {U_F}^k
+\end{equation}
+
+con cui si scrive:
+
+\begin{equation}\label{eqn:equazione-Hartree-Fock}
+    \hat{F}^k \ket{\phi_k} = \epsilon_k \ket{\phi_k}
+\end{equation}
+
+% --------------------------------------------------------------------------------------------------------------
+\subsection{Basi per gli orbitali molecolari}\label{subsec:basi}
+
+Finora, non si è discusso di come esprimere concretamente la funzione d’onda, ma è importante sottolineare che $\Psi$  appartiene allo spazio di Hilbert $\mathcal{H} = L^2(\mathbb{R}^3) \times \mathbb{C}^2$ , che è uno spazio infinito dimensionale. Per poterla trattare numericamente, è necessario svilupparla su una base che, pur essendo finita, permetta di ottenerne una rappresentazione approssimata. La selezione della base è dunque essenziale per bilanciare la precisione della descrizione e la complessità computazionale del sistema.
+
+Questo tema fu affrontato inizialmente nel 1951 da Roothaan, che propose di rappresentare gli orbitali molecolari come combinazioni lineari finite di \textbf{funzioni di base} $\{\chi_\nu\}$\footnote{Si adotterà la pratica, comune in letteratura, di associare indici latini agli orbitali molecolari e indici greci a quelli atomici}, spesso chiamate \textbf{orbitali atomici}:
+
+\begin{equation}\label{eqn:LCAO}
+    \phi_k \approx \sum_{\nu}^{} c_{\nu k}\chi_\nu
+\end{equation}
+
+dove $c_\nu$ sono i coefficienti della combinazione lineare. Tipicamente, nel'effettuare calcoli su sistemi atomici, si utilizzano come ansatz le funzioni d'onda idrogenoidi $\chi_{n\ell m}^{Z}$, che derivano dalla soluzione dell'unico problema molecolare risolvibile analiticamente.
+Storicamente, nelle prime versioni della teoria degli orbitali molecolari, furono proprio queste ad essere proposte come orbitali atomici per la costruzione delle funzioni $\phi_k$ \cite{Pople_1998}. Diventò consuetudine scegliere funzioni centrate sui nuclei atomici che richiamassero le $\chi_{n\ell m}^{Z}$ e fu in questo spirito che si iniziò ad utilizzare i \inglese{Slater-Type Orbitals} (STO) \cite{Echenique_2007}:
+
+\begin{equation}\label{eqn:STO}
+    \chi^{\text{STO}}_{a,b,c,\zeta} = N_{a,b,c} x^a y^b z^c e^{-\zeta |\vec{r}|}
+\end{equation}
+
+%\chi^{\text{STO}}_{\nu} (\vec{r},\vec{{R}_A}_\nu) = N^{\text{STO}}_{\nu} \tilde{Y}_{\ell_\nu m_\nu}^{c,s} ({\theta_A}_\nu,{\varphi_A}_\nu)|\vec{r}-{\vec{R}_A}_\nu|^{n_\nu-1} e^{-\zeta_\nu|\vec{r}-{\vec{R}_A}_\nu|}
+% $\tilde{Y}_{\ell_\nu m_\nu}^{c,s}$ delle armoniche sferiche modificate \cite{Echenique_2007}. 
+
+dove $N^{\text{STO}}_{a,b,c}$ è la costante di normalizzazione, $\zeta$ un parametro e $a,b,c$ sono legate al momento angolare.
+Queste funzioni mostrano gli stessi comportamenti asintotici delle $\chi_{n\ell m}^{Z}$ a corto e lungo raggio, rispettando le condizioni imposte dalla teoria, tuttavia presentano importanti svantaggi computazionali: gli integrali coinvolti nel calcolo del valore di aspettazione (eq. \ref{eqn:valore-di-aspettazione}) richiedono un grande sforzo in termini di tempo. Ciò rese impossibile l'implementazione delle STO nelle simulazioni di grandi molecole.
+
+La successiva introduzione delle funzioni gaussiane o \inglese{Gaussian-Type Orbitals} (GTO) fu un'importante sviluppo poiché, sacrificando alcune proprietà teoriche, permettevano di semplificare, e insieme velocizzare, i calcoli degli integrali.
+
+\begin{equation}\label{eqn:GTO}
+    \chi^{\text{GTO}}_{a,b,c,\zeta} = N_{a,b,c} x^a y^b z^c e^{-\zeta |\vec{r}|^2}
+\end{equation}
+
+In particolare, grazie al grande vantaggio computazionale, possono essere usate in quantità maggiore per sopperire alla loro inesattezza fisica. Pertanto, per combinare i pregi di STO e GTO, furono introdotte le funzioni gaussiane contratte o \inglese{Contracted GTO} (CGTO), che utilizzano un certo numero $n$ di funzioni gaussiane per approssimare una funzione di Slater:
+
+\begin{equation}\label{eqn:CGTO}
+    \chi^{\text{CGTO}}_{a,b,c,\zeta} = N_{a,b,c} x^a y^b z^c 
+    \sum_{i}^{n} e^{-\zeta_i |\vec{r}|^2}
+\end{equation}
+
+Infine, da queste funzioni nacque la famiglia di basi STO-$n$G, in cui ciascuna CGTO è costruita a partire da $n$ GTO. Al crescere del numero di funzioni gaussiane utilizzate aumenta l'accuratezza raggiunta dal calcolo, ma al prezzo di un più elevato tempo di esecuzione.
+Le simulazioni svolte nel contesto di questo elaborato saranno principalmente orientate ad uno studio qualitativo perciò, nella stragrande maggioranza dei casi, si utilizzerà la base STO-3G.
+
+

@@ -1,0 +1,36 @@
+% ==============================================================================================================
+\section{Variational quantum algorithms}\label{sez:VQA}
+
+% FIXME:
+Applicazioni come la simulazione di sistemi quantistici complessi o la risoluzione di problemi di algebra lineare su larga scala risultano molto impegnative per i computer classici a causa dei costi computazionali elevatissimi. I computer quantistici promettono una soluzione, ma gli attuali dispositivi quantistici sono limitati sia dal numero di qubit che dalla presenza di rumore, che riduce la profondità dei circuiti eseguibili \cite{Cerezo_2021}.
+
+Dalle necessità legate a queste considerazioni sono emersi i Variational Quantum Algorithms (VQA), algoritmi ibridi che utilizzano un ottimizzatore classico per \textbf{addestrare} circuiti quantistici parametrizzati. I VQA rappresentano oggi una delle strategie più promettenti per sfruttare le capacità dei dispositivi quantistici, con applicazioni praticamente in ogni campo previsto per i computer quantistici.
+
+Il primo passo nella costruzione di un VQA è la definizione di una funzione costo che sintetizzi la soluzione del problema; quindi si propone un \textbf{ansatz}, un'operazione quantistica che dipende da un certo set di parametri $\{\theta\}$ e che possa essere ottimizzata. Infine, marchio di fabbrica dei VQA, si utilizzano computer quantistici per la stima di una funzione costo $C(\vec{\theta})$, combinati ad ottimizzatori classici che ne perfezionano i parametri $\vec{\theta}$.
+
+% --------------------------------------------------------------------------------------------------------------
+\subsection{VQE}\label{subsec:VQE}
+
+Tra le applicazioni più promettenti dei VQA vi è la stima degli autovalori delle hamiltoniane.
+Prima della loro introduzione, le soluzioni computazionali proposte richiedevano hardware quantistici aldilà di quelli disponibili nell'era NISQ, spesso soggetti a errori di gate e con un numero limitato di qubits, che hanno tempi di coerenza ancora piccoli. Il \inglese{Variational Quantum Eigensolver} (VQE) è stato sviluppato per offrire un'alternativa a breve termine per questo compito \cite{Peruzzo_2014}.
+
+Lo scopo di VQE è approssimare autostati e autovalori di una data hamiltoniana $H$; ciò viene raggiunto definendo la funzione costo da minimizzare come il valore di aspettazione di quest'ultima su uno stato parametrico $\ket{\psi(\vec{\theta})} = U(\vec{\theta})\ket{\psi_0}$:
+
+\begin{equation}\label{eqn:cost-function}
+    C(\vec{\theta}) = \frac{\bra{\psi(\vec{\theta})} \hat{H} \ket {\psi(\vec{\theta})}}{\braket{\psi(\vec{\theta})}{\psi(\vec{\theta})}}
+\end{equation}
+\newline
+quando questo algoritmo viene applicato al calcolo dell'energia elettronica di una molecola, problema trattato nel presente elaborato, può essere schematizzato nelle seguenti fasi:
+
+\begin{enumerate}
+    \item Mantenendo fissi i nuclei, si calcola l'hamiltoniana del problema elettronico.
+    \item L'ansatz variazionale $\ket{\psi(\vec{\theta})}$ della funzione d'onda del sistema viene espresso tramite un circuito quantistico, composto da rotazioni parametrizzate.
+    \item Il computer quantistico calcola il valore di aspettazione di $\hat{H}$ e le sue derivate rispetto ai parametri $\vec{\theta}$.
+    \item Un computer classico ottimizza i parametri a partire dai risultati ottenuti al punto~3.
+    \item I punti 3 e 4 vengono reiterati fino al raggiungimento di un minimo dell'energia.
+\end{enumerate}
+
+Grazie ad algoritmi come VQE per la valutazione dell’energia di un’ampia classe di ansatze di funzioni d’onda, il cui calcolo richiederebbe risorse esponenzialmente crescenti su un dispositivo classico, sono sufficienti solo la preparazione dello stato e la misurazione di operatori di Pauli, operazioni che possono essere realizzate su un processore quantistico in tempo polinomiale \cite{Lee_2018}. Questo vantaggio potrebbe rendere possibile l'implementazione efficiente di ansatz come \inglese{Unitary Coupled Cluster}.
+
+
+

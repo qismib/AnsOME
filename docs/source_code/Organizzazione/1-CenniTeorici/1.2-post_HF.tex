@@ -1,0 +1,251 @@
+% ==============================================================================================================
+\section{Seconda quantizzazione}\label{sez:seconda-quantizzazione}
+
+In questo elaborato, così come nella letteratura, si fa spesso uso del formalismo di \textbf{seconda quantizzazione}, una formulazione della meccanica quantistica che facilita la descrizione dei sistemi a molti corpi. Se nella \textbf{prima} quantizzazione sono le variabili, come posizione e momento, a essere promosse ad operatori quantistici, nella seconda sono i campi stessi a essere \textbf{quantizzati}. Senza addentrarsi ulteriormente nei dettagli, l’idea è di considerare le particelle come eccitazioni fondamentali dei campi stessi; in questo senso, l’occupazione degli orbitali viene rappresentata tramite operatori di creazione e annichilazione, che aggiungono o rimuovono particelle dagli stati. Ne consegue che il numero di particelle nel sistema non è fissato, caratteristica che rappresenta l'elemento di novità fondamentale di questa notazione \cite{second_q}.
+
+% --------------------------------------------------------------------------------------------------------------
+\subsection{Spazio di Fock}
+
+Considerando questa descrizione, si introduce lo spazio di Fock $\mathcal{F}$ come una generalizzazione dello spazio di Hilbert, che permette di rappresentare stati con numero di particelle variabile. Si pensi innanzitutto agli elementi di $\mathcal{F}$: gli stati di Fock $\ket{f}$, che possono essere descritti tramite l'occupazione di ciascuno stato di singola particella. Se $n_\alpha\in\mathbb{N}$ è il numero di particelle in $\ket{\alpha}$ con $\alpha=1,2,...$ che indicizza lo stato
+
+\begin{equation}\label{eqn:stato-di-Fock}
+    \ket{f} = \ket{n_1 n_2 n_3 ...}
+\end{equation}
+
+Nel caso fermionico, uno stato $\ket{\alpha}$, caratterizzato da un proprio set di numeri quantici, può essere occupato al più da una particella, perciò: $n_\alpha\in\{0,1\}$. 
+Ad esempio, si considerino gli orbitali di spin (eq. \ref{eqn:orbitale-di-spin}): per indicare comodamente lo stato di occupazione dei $\phi_i$ si può adottare la notazione:
+
+\begin{equation}\label{eqn:notazione-ket}
+    \ket{j k \dots l} \equiv \ket{\phi_j \phi_k \dots \phi_l}
+\end{equation}
+
+Insomma, lo spazio di Fock $\mathcal{F}$ è lo spazio in cui vivono tutti i possibili stati di Fock $\ket{f}$, cioè tutte le configurazioni generabili a partire dal set dei $\{\phi_i\}$; se si hanno $2K$ orbitali di spin, si avrà che $\dim{(\mathcal{F})} = 2^{2K}$.
+
+% --------------------------------------------------------------------------------------------------------------
+\subsection{Operatori fermionici di creazione e distruzione}
+
+Se con $\ket{0}$ si indica lo \textbf{stato di vuoto}, si possono introdurre gli operatori creazione e distruzione:
+
+\begin{equation}\label{eqn:creazione-distruzione}
+\begin{cases}
+    a^{\dagger}_{i} \ket{0} = \ket{i}\\
+    a_i \ket{j} = \delta_{i j}\ket{0}
+\end{cases}
+\end{equation}
+
+$a^{\dagger}_{i}$ agisce sullo stato di vuoto \textbf{creando} un elettrone nello stato $\ket{i}$; $a_i$ agisce su uno stato occupato $\ket{j}$ \textbf{distruggendo} l'elettrone quando $j=i$, altrimenti restituisce zero.
+
+Equivalentemente, sullo stato $\ket{j k \dots l}$:
+
+\begin{equation}
+\begin{cases}
+    a^{\dagger}_{i} \ket{j k \dots l} = \ket{i j k \dots l}\\
+    a_i \ket{i j k \dots l} = \ket{j k \dots l}
+\end{cases}
+\end{equation}
+
+Su particelle di natura fermionica rispettano le condizioni richieste dalla teoria:
+
+\begin{enumerate}
+    \item \textbf{Antisimmetria} L'ordine in cui sono applicati due operatori di creazione è determinante: 
+    \begin{subequations}\label{eqn:antisimmetria-operatori-fermionici}
+        \begin{equation}
+            a^{\dagger}_{i} a^{\dagger}_{j} \ket{k \dots l} = \ket{i j k \dots l}
+        \end{equation}
+        mentre
+        \begin{equation}
+            a^{\dagger}_{j} a^{\dagger}_{i} \ket{k \dots l} = \ket{j i k \dots l} = - \ket{i j k \dots l}
+        \end{equation}
+        riassumendo:
+        \begin{equation}
+            a^{\dagger}_{i} a^{\dagger}_{j} \ket{0} = 
+            - a^{\dagger}_{j} a^{\dagger}_{i} \ket{0} = \ket{i j}
+        \end{equation}
+    \end{subequations}
+
+    \item \textbf{Esclusione} Non è possibile creare due elettroni nello stesso stato $\ket{i}$
+    \begin{equation}
+        a^{\dagger}_{i} a^{\dagger}_{i} \ket{0} = ( a^{\dagger}_{i})^2 \ket{0} = 0
+    \end{equation}
+\end{enumerate}
+
+
+Con queste premesse si può definire l'operatore numero:
+
+\begin{equation}\label{eqn:operatore-numero}
+    \hat{n}_i = a^{\dagger}_{i} a_{i}
+\end{equation}
+    
+i cui autovalori sono 0 e 1: 
+
+\begin{equation}\label{eqn:autovalori-operatore-numero}
+    \hat{n}_i \ket{i j k \dots l} = \ket{i j k \dots l}\\
+    \hat{n}_i \ket{j k \dots l} = 0
+\end{equation}
+
+in altri termini, quando $\hat{n}_i$ agisce su uno stato di Fock restituisce zero se lo stato $\ket{i}$ non è occupato, altrimenti restituisce lo stato di Fock stesso.
+
+% --------------------------------------------------------------------------------------------------------------
+\subsection{Particelle non interagenti}
+
+Si prenda un sistema di fermioni identici non interagenti. Supponendo di averne $M$, si può scrivere l'hamiltoniana del sistema
+
+\begin{equation}\label{eqn:hamiltoniana-libera}
+    \hat{H} = \sum_{i}^{M} \frac{|\,\hat{\vec{p}}\,|^2}{2m}
+\end{equation}
+
+Con il formalismo di seconda quantizzazione è possibile scrivere $\hat{H}$ senza specificare il numero di particelle; si possono ad esempio indicizzare i momenti $k$, sommando sui livelli energetici $\frac{k^2}{2m}$ pesati dal numero di particelle:
+
+\begin{equation}\label{eqn:hamiltoniana-libera-seconda-q}
+    \hat{H} = \sum_{k} \frac{k^2}{2m} a^{\dagger}_{k} a_{k}
+\end{equation}
+
+un'altra opzione è considerare l'hamiltoniana di singola particella $\hat{h}$ e supporre che possa essere diagonalizzata in questo modo:
+
+\begin{equation}
+    \hat{h} = \sum_{i} \epsilon_i\ \ket{i}\bra{i}
+\end{equation}
+
+che permette di scrivere:
+
+\begin{equation}
+    \hat{H} = \sum_{i} \epsilon_i\ a^{\dagger}_{i} a_{i}
+\end{equation}
+
+qui $a^{\dagger}_{i} a_{i}$ restituisce l'occupazione dello stato $\ket{i}$. L'hamiltoniana in sostanza è la somma delle possibili energie $\epsilon_i$ pesate dal numero di particelle.
+
+
+% --------------------------------------------------------------------------------------------------------------
+\subsection{Hamiltoniana di seconda quantizzazione}\label{subsec:hamiltoniana-seconda-q}
+
+La forma dell’Hamiltoniana elettronica, che descrive il problema di interesse in questo lavoro, deriva direttamente dalle considerazioni esposte finora \cite{modern_quantum_chem}.
+
+\begin{equation}\label{eqn:hamiltoniana-seconda-q}
+    H_{el} = \sum_{p,q} h_{pq} a^{\dagger}_{p} a_{q} +
+    \frac12 \sum_{p,q,r,s} g_{pqrs} a^{\dagger}_{p} a^{\dagger}_{q} a_{r} a_{s}
+\end{equation}
+
+Dove si sono introdotti due nuovi oggetti:
+
+\begin{subequations}
+\begin{itemize}
+    \item[$\bf h_{pq}$] è l'integrale a un elettrone, che contiene l'energia cinetica e l'interazione coulombiana con i nuclei
+    \begin{equation}\label{eqn:integrale-un-elettrone}
+        h_{pq} \equiv \bra{p} \hat{T}_e + U_{en}(\vec{r}) \ket{q} = 
+        \int \phi^{\star}_{p}(\vec{x})
+        \left(
+            \frac{\vec{p}^2}{2m_{e}} - \sum_{A} \frac{Z_A}{|\,\vec{R}_A-\vec{r}|}
+        \right) \phi_{q}(\vec{x})\ \d{\vec{x}} 
+    \end{equation}
+    \item[$\bf g_{pqrs}$] è l'integrale a due elettroni, dovuto alla repulsione elettrone-elettrone 
+    \begin{equation}\label{eqn:integrale-due-elettroni}
+        h_{pqrs} \equiv \bra{pq} U_{ee}(\vec{r}_1,\vec{r}_2) \ket{rs} =
+        \int 
+        \frac{\phi^{\star}_{p}(\vec{x}_1)\phi^{\star}_{q}(\vec{x}_2)\phi_{r}(\vec{x}_1)\phi_{s}(\vec{x}_2)}
+        {|\,\vec{r}_1 - \vec{r}_2|}\ \d{\vec{x}_1}\d{\vec{x}_2}
+    \end{equation}
+\end{itemize}
+\end{subequations}
+
+Poiché $H_{el}$ contiene somme con fino a quattro operatori creazione e distruzione indicizzati separatamente, se si andasse a costruirla a partire da $2K$ orbitali di spin, si otterrebbe un numero $\mathcal{O}(2K^4)$ di termini.
+
+% ==============================================================================================================
+\section{Metodi classici post Hartree-Fock}\label{sez:post-HF}
+
+L’approssimazione di campo medio introduce un importante errore sistematico poiché, durante il suo moto, un elettrone non interagisce con una semplice distribuzione uniforme, ma viene istantaneamente influenzato dalla repulsione coulombiana dovuta a ciascuno degli altri. Questo comportamento è noto come \textbf{correlazione elettronica} ed è considerato la principale limitazione del metodo di Hartree-Fock (sez. \ref{subsec:Hartree-Fock}) \cite{computational_chem}.
+La correlazione elettronica porta ad una diminuzione significativa dell'energia repulsiva tra gli elettroni, determinando un'energia elettronica minore di quella prevista da HF; diventa perciò necessario introdurre delle correzioni che possano prendere in considerazione questo fenomeno.
+
+I metodi sviluppati per descrivere correttamente le interazioni tra elettroni sono detti \textbf{post-Hartree-Fock}. Tra questi, \inglese{Configuration Interaction} (CI) e \inglese{Coupled Cluster} (CC) spiccano, per ragioni diverse, in molte applicazioni della chimica quantistica.
+
+% --------------------------------------------------------------------------------------------------------------
+\subsection{Configuration Interaction (CI)}\label{subsec:configuration-interaction}
+
+L'idea alla base della \inglese{configuration interaction} è migliorare la funzione d’onda HF aggiungendo termini che rappresentano la promozione degli elettroni dagli orbitali occupati a quelli virtuali. Ciascuno dei termini nella funzione d'onda CI rappresenta una configurazione elettronica specifica e la struttura elettronica del sistema viene interpretata come il risultato dell’interazione tra di esse.
+
+Si supponga di studiare un problema molecolare con $M$ elettroni attraverso il metodo di Hartree-Fock, da cui si ottiene il set di $2K$ orbitali di spin $\{\ket{\phi_i}\}$. La funzione d'onda HF $\ket{\Phi_{\text{HF}}}$ è il determinante di Slater costruito a partire dagli $M$ orbitali di spin associati a energie minori, ma combinando diversamente i $\{\ket{\phi_i}\}$ - includendo quelli rimasti liberi~- si possono ottenere molti altri determinanti a $M$ particelle, detti \inglese{configuration state functions} (CSF). 
+Ad esempio, con $\ket{\Phi_{a}^{r}}$ si indica il determinante di singola eccitazione, che differisce da $\ket{\Phi_{\text{HF}}}$ poiché l'orbitale di spin $\ket{\phi_a}$ viene sostituito da $\ket{\phi_r}$. Allo stesso modo, si possono definire il determinante di doppia eccitazione $\ket{\Phi_{ab}^{rs}}$, di terza $\ket{\Phi_{abc}^{rst}}$ e così via gli altri.
+Insieme, queste funzioni d'onda a molti elettroni possono essere usate per espandere la soluzione esatta del problema elettronico \cite{computational_chem}:
+
+
+\begin{subequations}\label{eqn:espansione-CI}
+\begin{equation}
+    \ket{\Psi} = c_0 \ket{\Phi_{\text{HF}}} + \sum_{a,r} c_{a}^{r} \ket{\Phi_{a}^{r}} +
+    \sum_{\substack{a<b\\r<s}} c_{ab}^{rs} \ket{\Phi_{ab}^{rs}} + 
+    \sum_{\substack{a<b<c\\r<s<t}} c_{abc}^{rst} \ket{\Phi_{abc}^{rst}} + \dots
+\end{equation}
+
+o, sfruttando il formalismo di seconda quantizzazione:
+
+\begin{equation}
+    \ket{\Psi} = c_0 \ket{\Phi_{\text{HF}}} + \sum_{a,r} c_{a}^{r}\, a_{a} a^{\dagger}_{r}\ket{\Phi_{\text{HF}}} +
+    \sum_{\substack{a<b\\r<s}} c_{ab}^{rs}\, a_{a}a_{b} a^{\dagger}_{r}a^{\dagger}_{s} \ket{\Phi_{\text{HF}}} + 
+    \sum_{\substack{a<b<c\\r<s<t}} c_{abc}^{rst}\,
+    a_{a}a_{b}a_{c} a^{\dagger}_{r}a^{\dagger}_{s}a^{\dagger}_{t}  \ket{\Phi_{\text{HF}}} + \dots
+\end{equation}
+\end{subequations}
+
+una volta costruita la $\ket{\Psi}$, parametrica nei coefficienti $c$, si può calcolare l'energia tramite il principio variazionale. 
+Se tutte le CSF possibili vengono considerate il metodo CI fornisce risultati estremamente accurati e prende il nome \inglese{Full Configuration Interaction} (FCI); purtroppo, anche partendo da una base $\{\ket{\phi_i}\}$ incompleta, FCI diventa rapidamente intrattabile al crescere della complessità della molecola, rimanendo applicabile soltanto a sistemi molto semplici. 
+Una comune approssimazione per ridurre il costo computazionale di FCI è la \inglese{Configuration Interaction Singles Doubles} (CISD), che consiste nel troncare l'espansione (eq. \ref{eqn:espansione-CI}) alle sole CSF di singola e doppia eccitazione; alcune sue varianti sono CISDT e CISDTQ, che aggiungono a CISD i determinanti di tripla e quadrupla eccitazione \cite{Sherrill_1995}. 
+Altre implementazioni frequenti di CI sono i \inglese{Multi-Configurational SCF} (MCSCF), in cui si vanno ad ottimizzare anche i coefficienti LCAO (eq. \ref{eqn:LCAO}), e la variante \inglese{Complete Active Space SCF} (CASSCF), in cui si selezionano soltanto gli orbitali molecolari che contribuiscono maggiormente alla correlazione, gli \inglese{active orbitals}, per formare un \inglese{active space} di dimensioni ridotte.
+
+Pur rappresentando delle alternative valide, le approssimazioni troncate di CI presentano un problema pratico che non può essere eluso: non soddisfano una proprietà fondamentale, la \inglese{size consistency}, cruciale per la corretta descrizione dei sistemi complessi.
+
+% ..............................................................................................................
+\subsubsection{Size Consistency}
+
+Un metodo computazionale è detto \inglese{size-consistent} se permette di fattorizzare la funzione d'onda di un sistema - composto da sottosistemi non interagenti - come prodotto delle funzioni d'onda degli elementi che lo compongono, così da poter scrivere l'energia totale come la somma dei singoli frammenti \cite{Anand_2022}. Ad esempio, per due sistemi $A$ e $B$ infinitamente lontani, come gli atomi dissociati di una molecola, varrebbero lo relazioni:
+
+\begin{equation}\label{eqn:size-consistency}
+\begin{cases}
+    \psi_{AB} = \ket{\psi_A\psi_B}\\
+    E_{AB} = E_A + E_B
+\end{cases}
+\end{equation}
+
+Dal momento che le tecniche CI appena discusse non godono di questa proprietà, diventa prioritario trovare un metodo con un costo computazionale contenuto che soddisfi anche la condizione di \inglese{size consistency}.
+
+% --------------------------------------------------------------------------------------------------------------
+\subsection{Coupled Cluster (CC)}\label{subsec:coupled-cluster}
+
+I metodi \inglese{Coupled Cluster}, inizialmente introdotti nel 1960, godono della proprietà di \inglese{size consistency} e sono attualmente considerati il \inglese{golden standard} dei metodi computazionali per via del bilanciamento tra accuratezza e efficienza che offrono \cite{Anand_2022,Bartlett_2007}. 
+
+L'idea alla base della teoria CC è descrivere la funzione d'onda di stato fondamentale applicando un operatore d'eccitazione $\hat{T}$ esponenziato su un determinante di riferimento, tipicamente lo stato di Hartree-Fock $\ket{\Phi_{\text{HF}}}$.
+
+\begin{equation}\label{eqn:coupled-cluster}
+    \ket{\Phi_{\text{CC}}} = e^{\hat{T}} \ket{\Phi_{\text{HF}}}
+\end{equation}
+
+$\hat{T}$ è detto \textbf{operatore di cluster} e la sua azione, in analogia con il metodo CI, è quella di restituire una combinazione lineare di determinanti. Nello specifico, $\hat{T}$ è la somma degli operatori relativi ai diversi ordini di eccitazione $\hat{T} = \hat{T}_1 + \hat{T}_2 + \dots$, dove:
+
+\begin{subequations}\label{eqn:cluster-operator}
+\begin{equation}\label{eqn:cluster-operator-singles}
+    \hat{T}_1 = \sum_{a,r} \theta_{a}^{r}\, a^{\dagger}_r a_a
+\end{equation}
+
+\begin{equation}\label{eqn:cluster-operator-doubles}
+    \hat{T}_2 = \sum_{\substack{a<b\\r<s}} \theta_{ab}^{rs}\, a^{\dagger}_r a^{\dagger}_{s} a_a a_b
+\end{equation}
+\end{subequations}
+
+Tra gli aspetti vantaggiosi di CC vi è la possibilità di troncare sistematicamente $\hat{T}$ ad ordini minori; a seconda di quanti termini si includono nella somma si ottengono le varianti CCS, CCD, CCSD e così via:
+
+\begin{subequations}\label{eqn:CC-variants}
+\begin{align}
+    \ket{\Phi_{\text{CCS}}}  &= e^{\hat{T}_1} \ket{\Phi_{\text{HF}}}
+    \\
+    \ket{\Phi_{\text{CCD}}}  &= e^{\hat{T}_2} \ket{\Phi_{\text{HF}}}
+    \\
+    \ket{\Phi_{\text{CCSD}}} &= e^{\hat{T}_1 + \hat{T}_2} \ket{\Phi_{\text{HF}}}
+\end{align}
+\end{subequations}
+
+I vantaggi della teoria \inglese{Coupled Cluster} hanno un prezzo: il singolo determinante di riferimento rende i metodi CC non variazionali, ma la \inglese{size consistency} è ritenuta una questione di maggiore importanza \cite{Pople_1998}.
+
+Vi è una variante significativa di CC, la \inglese{Unitary Coupled Cluster} (UCC), che consiste nel modificare la trasformazione $e^{\hat{T}}$ in modo da renderla unitaria:
+
+\begin{equation}\label{eqn:unitary-coupled-cluster}
+    \ket{\Phi_{\text{UCC}}} = e^{\hat{T}-\hat{T}^\dagger} \ket{\Phi_{\text{HF}}}
+\end{equation}
+
+quest'ultima è di particolare interesse perché, come verrà trattato in seguito (sez. \ref{sez:quantum-coupled-cluster}), può essere mappata in modo naturale su un circuito quantistico \cite{Sokolov_2020}.
