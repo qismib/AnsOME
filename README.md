@@ -7,7 +7,7 @@ Ansatz Optimization for Molecular Energy (Estimation)
 
 * ***notebooks***: contains jupyter notebooks
 
-* ***requirements.txt***: list of installed packages used for the virtual python environment (python version: 3.8.5).
+* ***requirements.txt***: list of installed packages used for the virtual python environment (python version: 3.12.4).
 
 ## Summary
 
