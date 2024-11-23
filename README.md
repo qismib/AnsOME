@@ -11,7 +11,7 @@ Ansatz Optimization for Molecular Energy (Estimation)
 
 ## Summary
 
-La chimica quantistica tradizionale offre una varietà di strategie per descrivere i sistemi molecolari e le loro interazioni: tra questi, i metodi \inglese{Coupled Cluster} si sono imposti come \inglese{golden standard}. Tuttavia, presentano limitazioni computazionali significative, specialmente in presenza di sistemi fortemente correlati o di grandi dimensioni. Ad esempio, la variante più utilizzata \inglese{Coupled Cluster Cingles Doubles (Triples)} CCSD(T), che include eccitazioni singole, doppie e un'approssimazione delle triple, ha un costo computazionale che scala come la settima potenza della dimensione del problema.
+La chimica quantistica tradizionale offre una varietà di strategie per descrivere i sistemi molecolari e le loro interazioni: tra questi, i metodi \inglese{Coupled Cluster} si sono imposti come \inglese{golden standard}. Tuttavia, presentano limitazioni computazionali significative, specialmente in presenza di sistemi fortemente correlati o di grandi dimensioni. Ad esempio, la variante più utilizzata \inglese{Coupled Cluster Singles Doubles (Triples)} CCSD(T), che include eccitazioni singole, doppie e un'approssimazione delle triple, ha un costo computazionale che scala come la settima potenza della dimensione del problema.
 
 Per superare questi limiti, la computazione quantistica si è proposta come una nuova frontiera, promettendo di rappresentare gli stati quantistici in modo più efficiente rispetto agli schemi classici.
 
